@@ -1,62 +1,9 @@
 #!/home/weightwater/anaconda3/bin/python
 
 from flask import Flask, jsonify, abort, make_response, request
-from my_first_api import get_static_data
+from myapi import get_static_data
 
 app = Flask(__name__)
-
-tasks = [
-    {
-        'id':1,
-        'title': u'Buy groceries',
-        'description': u'Milk, Cheese, Pizza, Fruit, Tylenol',
-        'done': False
-    },
-    {
-        'id': 2,
-        'title': u'Need to find a good Python tutorial on the web',
-        'done': False
-    }
-]
-
-@app.route('/todo/api/v1.0/tasks/<int:task_id>', methods=['GET'])
-def get_task(task_id):
-    task = []
-    for item in tasks:
-        if item['id'] == task_id:
-            return jsonify({'xixi': item})
-    if len(list(task)) == 0:
-        abort(404)
-
-
-@app.route('/get_static_data/<int:data_id>', methods=['GET'])
-def getDataStatic(data_id):
-    if isinstance(data_id, int) and data_id < 112 and data_id > 0:
-        data = get_static_data(data_id)
-        return jsonify({'data': data})
-    else:
-        abort(404)
-
-
-
-@app.route('/checktask', methods=['GET'])
-def check_task():
-    return jsonify({'task': tasks})
-
-
-@app.route('/lalala/api/emm', methods=['POST'])
-def create_task():
-    if not request.json or not 'title' in request.json:
-        abort(404)
-    task = {
-        'id': tasks[-1]['id'] + 1,
-        'title': request.json['title'],
-        'description': request.json.get('description', ""),
-        'done': False
-    }
-    tasks.append(task)
-    return jsonify({'task': task}), 201
-
 
 @app.errorhandler(404)
 def not_found(error):
